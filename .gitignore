@@ -1,0 +1,26 @@
+# Large third-party dependencies are preserved in the complete Release ZIP.
+/installers/
+/runtime/
+/sdk/
+
+# Local recordings, diagnostics, caches, and credentials do not belong in Git.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.env.*
+*.pem
+*.key
+/camera-recordings/
+/camera-diagnostics/
+/recordings/
+/diagnostics/
+*.mkv
+*.mp4
+*.avi
+*.frames.csv
+*.log
+*.tmp
+Thumbs.db
+desktop.ini

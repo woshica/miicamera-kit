@@ -1,0 +1,17 @@
+{
+  "profile": "daylight-4k-trial",
+  "width": 3840,
+  "height": 2160,
+  "fps": 30,
+  "speed_level": 2,
+  "sdk_frame_rate_limit": 0,
+  "frontend_buffer": 16,
+  "backend_buffer": 16,
+  "usb_thread_priority": 2,
+  "exposure_us": 10000,
+  "gain": 100,
+  "encoder": "libx264",
+  "segment_seconds": 300,
+  "lens_focal_length_mm": 8,
+  "status": "Trial settings. Adjust lighting, focus and exposure on site before acceptance."
+}

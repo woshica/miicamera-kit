@@ -1,0 +1,121 @@
+# 相机录制的统一配置文件：用记事本打开，修改后保存，再双击「启动录制.cmd」。
+# 先双击「检查录制配置.cmd」检查语法和实际生效参数，不会打开相机。
+# 「试录当前配置一分钟.cmd」只临时改成60秒、20秒分段，其余全部使用本文件。
+# 仅控制本工具；不控制ImageView。旧CQ23/CRF等专用入口仍读取各自旧JSON。
+# 数值不要加中文单位；文字保留英文双引号；true/false小写；#后是注释。
+# 必须将所有顶层参数放在下面的[x265_params]、[imaging]之前。
+
+schema_version = 1                         # 文件格式版本，保持1
+profile = "mouse-editable-cq30"            # 本次方案名称，可改，随录像存档
+description = "CQ30试录起点；成像参数沿用当前室内调试。正式小鼠需按照明调整。"
+
+# —— 录制方式：CQ和CRF二选一 ——
+# hevc_nvenc = NVIDIA H.265，用nvenc_cq；libx265 = CPU H.265，用crf。
+# h264_nvenc = NVIDIA H.264，用nvenc_cq；libx264 = CPU H.264，用crf。
+# 切到H.264时必须同时将b_frames改为0。本入口不接受auto，避免静默回退。
+encoder = "hevc_nvenc"
+rate_control = "quality"                   # quality=按CQ/CRF；capped_vbr=目标/上限码率
+nvenc_cq = 30                              # NVIDIA CQ，1~51；可改23、26、30、32等，越小通常文件越大
+crf = 21                                   # CPU CRF，0~51；与CQ不能直接换算，CQ模式忽略本行
+nvenc_preset = "p5"                        # NVIDIA p1~p7：通常越往后计算越多；改变后重测吞吐
+x265_preset = "superfast"                  # 仅libx265：ultrafast/superfast/veryfast/faster/fast/medium/slow/slower/veryslow/placebo
+# 本机libx265 CRF21的4K45吞吐曾失败；保留此选项用于对照，不等于长录已通过。
+
+# —— GOP与B帧 ——
+gop_frames = 250                           # 最大/目标关键帧间隔，单位帧；45fps时约5.56秒
+b_frames = 3                               # HEVC最多连续B帧0~3；H.264路径当前只支持0
+# 分段开始会强制独立关键帧，可能提前结束GOP；并非固定“一个I帧+249个P帧”。
+
+# —— 只在capped_vbr模式生效；quality模式下以下三个码率值均不生效 ——
+# libx265暂不支持capped_vbr；其他受支持编码器可用。限制码率可能牺牲复杂画面细节。
+bitrate_mbps = 24                          # 平均目标，Mbps，不是MB/s
+maxrate_mbps = 26                          # VBV上限，必须>=bitrate_mbps
+buffer_mbits = 52                          # VBV缓冲，Mbit；不等于内存中的图像队列
+
+# —— 输出与时长 ——
+duration_hours = 0.01                        # 本次计划录制小时数，>0且<=168；72小时填72
+segment_seconds = 3600                    # 每3600秒名义视频时长一个文件；最后一段可不足1小时
+output_dir = ""                           # 空字符串=自动选择环境包外camera-recordings目录
+# 指定客户保存盘时可填 "D:/MouseRecordings"；必须为绝对路径且不能在软件包里面。
+max_recording_gb = 9999                     # 单次记录目录的GB停止阈值；达到时标记未完成，不是72小时容量保证
+keep_awake = true                         # 录制时阻止自动睡眠；无法防止断电或Windows重启
+# 视频固定MKV容器，8bit YUV420，无声音；每次自动新建目录，不覆盖既有视频。
+# CQ/CRF容量随画面变化。低磁盘空间保护另固定保留10GiB，不由本文件关闭。
+
+# —— 相机采集 ——    
+width = 3840                              # 本工具当前仅支持3840×2160
+height = 2160
+fps = 45                                  # 常用45或30；改30时同时把speed_level改2
+speed_level = 4                           # 本型号45fps对应4，30fps对应2
+sdk_frame_rate_limit = 0                   # 保持0；SDK软件限帧可能丢弃源帧，不能用来替代speed_level
+exposure_us = 12000                        # 微秒；12000=12ms，约1/83秒；1/90秒约11111
+gain = 400                               # SDK百分数，100=1倍、1016约10.16倍
+# 先前室内对照用过12ms/1016%；曝光和增益应按现场照明调整，并非固定推荐值。
+# 高增益可能放大噪声和体积；正式机位优先补足光照，再把增益降到例如100并检查亮度。
+frontend_buffer = 16                      # SDK前端缓冲帧数，2~64；保留已验证16
+backend_buffer = 16                       # SDK后端缓冲帧数，2~64；保留已验证16
+usb_thread_priority = 2                   # SDK USB接收线程优先级0/1/2；保留已验证2
+
+# —— 录制时的实时预览；只影响查看窗口，不改变保存视频的分辨率/帧率 ——
+preview_enabled = true                    # true=录制时显示；false=关闭。下次启动录制生效
+preview_fps = 5                           # 预览刷新上限1~10fps；默认5，慢时只跳过预览帧
+preview_max_width = 960                   # 预览最大宽度320~1280像素；等比例整数缩小
+# 关闭预览窗口或按Q/Esc只关闭预览，录像继续；停止录像请在CMD按一次Ctrl+C并等待收尾。
+# 不要同时打开ImageView预览。本预览共享录制采集到的画面，不重新打开相机。
+
+# —— CMD录制进度；下次启动录制生效 ——
+status_enabled = true                     # 显示时间、分段、码率估算、帧率、队列和磁盘空间
+status_interval_seconds = 2               # 输出间隔1~60秒；不改变录像和预览帧率
+
+# —— x265专用高级参数：仅encoder="libx265"时生效 ——
+# 来自官方样片的编码信息；不要在这里重复写crf/keyint/bframes，以上顶层值负责这三项。
+# 参数含义见「录制参数说明.md」。新机器CPU核数不同，可调整pools，但需重新测试。
+[x265_params]
+frame-threads = 1
+pools = 20
+ref = 1
+min-keyint = 25
+b-adapt = 0
+rc-lookahead = 10
+scenecut = 40
+ctu = 32
+min-cu-size = 8
+rect = 0
+amp = 0
+max-tu-size = 32
+tu-inter-depth = 1
+tu-intra-depth = 1
+me = 1
+subme = 1
+merange = 57
+weightp = 0
+weightb = 0
+sao = 0
+rd = 2
+aq-mode = 1
+aq-strength = 0
+cutree = 1
+open-gop = 1
+b-pyramid = 1
+strong-intra-smoothing = 1
+psy-rd = 2
+deblock = "0,0"
+
+# —— 相机成像：与CQ/CRF无关，都会生效 ——
+# 机械对焦、光圈和机位仍需在镜头/支架上调整；本文件不能自动对焦。
+[imaging]
+bit_depth = 8                             # 当前录制链路固定8bit
+binning = 1                               # 固定1，不做像素合并
+roi = "full"                              # 固定全画幅
+gamma = 100                               # SDK值100=1.00，范围20~180
+contrast = 0                              # -255~255
+brightness = 0                            # -255~255
+hue = 0                                   # -180~180
+saturation = 128                          # 0~255
+sharpening = 0                            # 0~500；0关闭锐化
+white_balance_temp = 5468                 # 2000~15000；当前室内白平衡值
+white_balance_tint = 1163                 # 200~2500；换照明/夜间红外需重新检查
+level_low = [0, 0, 0, 0]                   # 四通道低端，0~255，逐项必须小于level_high
+level_high = [255, 255, 255, 255]           # 四通道高端，0~255
+# denoise故意不写：保持SDK现状，不宣称已关闭降噪。本机对此选项支持有限。
+# 如设备确实支持，可增加 denoise = 0（范围0~100）；写入失败会停止，不能静默忽略。

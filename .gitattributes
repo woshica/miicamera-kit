@@ -1,0 +1,2 @@
+# Preserve exact bytes, including Chinese CMD CRLF and delivery manifest hashes.
+* -text

@@ -1,0 +1,41 @@
+{
+  "prepared_on": "2026-10-19",
+  "vendor_release": "2026-09-11",
+  "sdk_version": "60.32549.20260908",
+  "imageview_version": "4.12.32549.20260908",
+  "sources": [
+    {
+      "name": "MIIImageViewSetup.exe",
+      "url": "https://cn.miicamera.net/download.php?file=2026-09-11%2FMIIImageViewSetup.exe",
+      "sha256": "c2168176e04d01c869772a75622eaf1b3acdca4692e41342e8b018078a9a06ce",
+      "bytes": 62405990
+    },
+    {
+      "name": "MIIDshowSetup.exe",
+      "url": "https://cn.miicamera.net/download.php?file=2026-09-11%2FMIIDshowSetup.exe",
+      "sha256": "69a6d774f2c90b19aa83896e474937a0269e3e11ed91d67c92891a9733268afe",
+      "bytes": 8414618
+    },
+    {
+      "name": "miicamsdk.20260908.zip",
+      "url": "https://cn.miicamera.net/download.php?file=2026-09-11%2Fmiicamsdk.20260908.zip",
+      "sha256": "ce2d1be1fe8dce065d398c41cf5d62839f969065a9eef64cc3540e48104d89b8",
+      "bytes": 256946203
+    },
+    {
+      "name": "hash.txt",
+      "url": "https://cn.miicamera.net/download.php?file=2026-09-11%2Fhash.txt",
+      "sha256": "32b08aa3cbc060fdd90ae074f6352846afe7adc5f1fd27576bc8b9e409138637",
+      "bytes": 2076
+    },
+    {
+      "name": "python-3.12.10-embed-amd64.zip",
+      "url": "https://www.python.org/ftp/python/3.12.10/python-3.12.10-embed-amd64.zip",
+      "sha256": "4acbed6dd1c744b0376e3b1cf57ce906f9dc9e95e68824584c8099a63025a3c3",
+      "note": "Extracted python.exe Authenticode signature Valid: Python Software Foundation"
+    }
+  ],
+  "ffmpeg": "Copied installed FFmpeg 2026-04-22-git-162ad61486 full_build-www.gyan.dev; license and docs preserved",
+  "vendor_checks": "Three vendor binary SHA256 values match the same release hash.txt. Setup executables are not Authenticode-signed.",
+  "layout": "Original ImageView layout retained: x64/imageview.exe and sibling DLLs beneath runtime/imageview/, with shared i18n/, help/, imageview.exml and imageview.dye in runtime/imageview/; complete vendor multi-platform SDK retained both extracted and as original ZIP"
+}
