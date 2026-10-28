@@ -1,8 +1,8 @@
 # 相机录制工具包
 
-独立私有仓库：[woshica/miicamera-kit](https://github.com/woshica/miicamera-kit)。Git 保存源码、配置、启动入口和说明；`runtime/`、`sdk/`、`installers/` 的完整依赖放在同一仓库的 [Releases](https://github.com/woshica/miicamera-kit/releases) 附件中。
+独立公开仓库：[woshica/miicamera-kit](https://github.com/woshica/miicamera-kit)。Git 保存源码、配置、启动入口和说明；`runtime/`、`sdk/`、`installers/` 的完整依赖放在同一仓库的 [Releases](https://github.com/woshica/miicamera-kit/releases) 附件中。
 
-**客户电脑请下载 Release 中的 `miicamera-kit-版本号.zip` 完整包**，并使用旁边的 SHA-256 文件核对。GitHub 自动生成的 `Source code (zip)` 和单独 `git clone` 只含源码，不能直接运行。解压后先运行 `test/校验软件包.cmd`。私有附件需要有仓库访问权限的账号下载；不要为分发附件擅自改成公开仓库。
+**客户电脑请下载 Release 中的 `miicamera-kit-版本号.zip` 完整包**，并使用旁边的 SHA-256 文件核对。GitHub 自动生成的 `Source code (zip)` 和单独 `git clone` 只含源码，不能直接运行。解压后先运行 `test/校验软件包.cmd`。仓库已于 2026-10-28 按负责人要求改为公开，浏览器下载无需登录；客户网络仍须能够访问 GitHub 及附件下载地址。
 
 **本版：v2026.10.28。** 完整交付包 `miicamera-kit-v2026.10.28.zip` 合并新版工作台、运行依赖和累计升级入口。客户按[下载与安装指南](docs/客户下载与安装指南.md)选择首次使用或更新已有安装；无需逐个安装旧更新包。
 
@@ -14,7 +14,7 @@
 - [客户下载与安装指南](docs/customer-download-guide.html)：GitHub 下载完整附件、新电脑使用、已有安装保留配置更新，支持离线阅读。
 - [离线阅读与打印版](docs/operator-guide.html)：与上手指南相同内容，无外部资源。
 - [维护人员配置说明](docs/维护人员配置说明.md)：配置分层、首次导入、方案覆盖与客户更新。
-- [一键更新可行性](docs/automatic-update-feasibility.md)：GitHub Release 下载、私有访问及待实现的更新流程。
+- [一键更新可行性](docs/automatic-update-feasibility.md)：早期私有访问评估和待实现的在线更新流程，含公开后的状态补充。
 
 优先使用已有 config/operator/。尚无该目录时，先兼容导入客户本机保留的根目录「录制参数.toml」；若没有该旧文件，则从 config/operator-template.json 创建配置。deprecated/录制参数.toml仅供旧工作流追溯，不是工作台的初始化来源。已有配置不会因模板变化而覆盖。初始化后再修改旧 TOML 不会同步界面。新界面只读显示帧率、分辨率和编码器，日常不需编辑编码参数。预览约 2 fps、宽度不超过 960；保存视频仍按所选方案实际参数录制。关闭浏览器不会停止录制，停止须按页面「停止并保存」并等待收尾验证；不要关闭后台 CMD。
 
@@ -35,7 +35,7 @@
 
 ## 仓库维护与发布
 
-日常在本目录提交代码和配置。运行依赖被 `.gitignore` 排除，录像和诊断结果继续保存在软件包之外。本仓库不包含上级研究仓库的历史或实验录像；新版本请保留第三方程序的原有许可文件，不因本仓库私有而改变其授权。
+日常在本目录提交代码和配置。运行依赖被 `.gitignore` 排除，录像和诊断结果继续保存在软件包之外。本仓库不包含上级研究仓库的历史或实验录像；新版本请保留第三方程序的原有许可文件，仓库公开不改变第三方程序的授权。实际现场方案、订阅或代理凭据不得提交到本仓库或 Release。
 
 开发时从对应 Release 完整包恢复 `runtime/`、`sdk/`、`installers/`，不要用不匹配的依赖覆盖当前版本。`.gitattributes` 保留文件原始字节，避免 Git 换行转换导致中文 CMD 或交付校验失效。
 

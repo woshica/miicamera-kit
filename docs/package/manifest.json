@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "created_at_utc": "2026-10-28T11:26:04.033993+00:00",
+  "created_at_utc": "2026-10-28T11:45:10.840799+00:00",
   "excluded": [
     "**/*.3gp",
     "**/*.avi",
@@ -172,13 +172,13 @@
     },
     {
       "path": "docs/automatic-update-feasibility.md",
-      "bytes": 7370,
-      "sha256": "aeb706fe54c345c965ea8e9dfb77b0587bb8667e0fb71164644113e128a8033c"
+      "bytes": 7888,
+      "sha256": "197c3d01e8ac8bd739d029aeab44ab6ae2324cb116e63c913fcf6508eb994a10"
     },
     {
       "path": "docs/customer-download-guide.html",
-      "bytes": 12779,
-      "sha256": "c9d93605b891ccfb990e88f851d03de5354b81fd9ba11795d499251383720634"
+      "bytes": 13916,
+      "sha256": "08cf92c69b1e21a3c79e001b77a9053774fbd92a079e8ce50e028a52b7ab076f"
     },
     {
       "path": "docs/diagnosis-and-vendor-questions.md",
@@ -222,8 +222,8 @@
     },
     {
       "path": "docs/客户下载与安装指南.md",
-      "bytes": 10556,
-      "sha256": "99fe3b0a91d08fd08b01e178bc0f20be103f5be8ab207b2584c71adde1ff6377"
+      "bytes": 11655,
+      "sha256": "6f9ec20da6716d18fb21bc47ef4758d74f3016c14399cc0cfd9b8bf698a62758"
     },
     {
       "path": "docs/操作员上手指南.md",
@@ -232,8 +232,8 @@
     },
     {
       "path": "docs/维护人员配置说明.md",
-      "bytes": 7634,
-      "sha256": "583affc95c63679b2350a937466609f8e8483af4fd490281220971e1ec2e904c"
+      "bytes": 7935,
+      "sha256": "d6ba7523b0bb176f81b7301e1b692d504a735342c09bf1091a6254e747acfda1"
     },
     {
       "path": "installers/hash.txt",
@@ -262,8 +262,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 5978,
-      "sha256": "b52118b82afc9310eeb53217d07cbc01facff8bb6967d636f67d19b9792f7873"
+      "bytes": 6132,
+      "sha256": "17869950e00bb139f7f5fcc47bfdee7e06473d95dd614cd41ac16a0b7fa99b6f"
     },
     {
       "path": "runtime/ffmpeg/bin/ffmpeg.exe",
