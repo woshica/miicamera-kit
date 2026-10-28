@@ -16,6 +16,9 @@ __pycache__/
 /camera-diagnostics/
 /recordings/
 /diagnostics/
+/config/operator/
+/config/.operator-*/
+/deprecated/user-archive/
 *.mkv
 *.mp4
 *.avi

@@ -24,12 +24,12 @@ class LauncherTests(unittest.TestCase):
         # An unrelated working directory must not affect sibling-module imports.
         # Recommended entries reject this relative destination before capture.
         cases = (
-            ('test/启动相机工具.cmd', '0\n\n', '相机拍摄工具'),
-            ('test/检查录制配置.cmd', '\n', '配置检查通过'),
-            ('test/legacy/按推荐配置录制.cmd', 'relative-output\n\n', '请填写绝对路径'),
-            ('test/legacy/推荐配置试录60秒.cmd', 'relative-output\n\n', '请填写绝对路径'),
-            ('test/legacy/试录官方参数CRF一分钟.cmd', 'relative-output\n\n', '请填写绝对路径'),
-            ('test/legacy/按官方参数CRF录制.cmd', 'relative-output\n\n', '请填写绝对路径'),
+            ('deprecated/test/启动相机工具.cmd', '0\n\n', '相机拍摄工具'),
+            ('deprecated/test/检查录制配置.cmd', '\n', '配置检查通过'),
+            ('deprecated/test/legacy/按推荐配置录制.cmd', 'relative-output\n\n', '请填写绝对路径'),
+            ('deprecated/test/legacy/推荐配置试录60秒.cmd', 'relative-output\n\n', '请填写绝对路径'),
+            ('deprecated/test/legacy/试录官方参数CRF一分钟.cmd', 'relative-output\n\n', '请填写绝对路径'),
+            ('deprecated/test/legacy/按官方参数CRF录制.cmd', 'relative-output\n\n', '请填写绝对路径'),
         )
         with tempfile.TemporaryDirectory(prefix='camera launcher ') as cwd:
             for filename, answers, expected in cases:

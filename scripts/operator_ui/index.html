@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>相机录制工作台</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="/app.js" defer>
+    </script>
+  </head>
+  <body>
+    <main>
+      <header>
+        <div>
+          <p class="eyebrow">MII CAMERA · 本机工作台</p>
+          <h1>相机录制工作台</h1>
+        </div>
+        <a class="help" href="/guide" target="_blank" rel="noopener">使用说明 ↗</a>
+      </header>
+      <div id="notice" role="status" hidden>
+      </div>
+      <div class="layout">
+        <section class="card monitor">
+          <div class="section-head">
+            <h2>实时预览</h2>
+            <span class="chip">预览约 2 fps</span>
+            <p id="summary" class="summary">
+            </p>
+          </div>
+          <div class="preview">
+            <img id="preview" alt="相机实时预览" hidden>
+            <div id="placeholder">
+              <svg class="camera-icon" width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <path d="M9 20h12l5-7h12l5 7h12v32H9z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/>
+                <circle cx="32" cy="35" r="11" stroke="currentColor" stroke-width="2.5"/>
+                <circle cx="48" cy="27" r="2" fill="currentColor"/>
+              </svg>
+              <p>打开预览，检查构图、亮度和对焦</p>
+              <small>请先关闭官方 ImageView 的相机预览</small>
+            </div>
+          </div>
+          <div class="preview-controls">
+            <button id="previewStart" class="secondary">打开预览</button>
+            <button id="previewStop" class="text-button" hidden>停止预览</button>
+            <span class="hint">预览刷新较慢，不代表录像帧率。</span>
+          </div>
+          <div class="tool-controls">
+            <button id="imagingOpen" class="secondary">详细画面配置</button>
+            <button id="officialOpen" class="text-button">打开官方录制软件 ↗</button>
+          </div>
+          <p id="officialNotice" class="hint" hidden>官方 ImageView 已打开。请关闭它后再返回工作台预览或录像；官方软件中的修改不会自动保存到这里的方案。</p>
+        </section>
+        <section class="card settings">
+          <h2>拍摄与录制设置</h2>
+          <div class="form-row">
+            <label for="scheme">拍摄方案</label>
+            <select id="scheme"></select>
+          </div>
+          <p class="session-rule">本轮使用同一方案，录制中不可更改。</p>
+          <div class="form-row">
+            <label for="output">保存位置</label>
+            <input id="output" type="text" placeholder="例如 D:/MouseRecordings" spellcheck="false">
+          </div>
+          <p class="hint">使用软件包外的完整文件夹路径。</p>
+          <div class="fields">
+            <div>
+              <label for="hours">录制时长 <small>小时</small>
+              </label>
+              <input id="hours" type="number" min="0.000278" max="168" step="any">
+            </div>
+            <div>
+              <label for="minutes">每段时长 <small>分钟</small>
+              </label>
+              <input id="minutes" type="number" min="0.016667" max="1440" step="any">
+            </div>
+          </div>
+          <div class="adjustment-section">
+            <h3>画面调整</h3>
+            <div class="fields">
+              <div>
+                <label for="exposure">曝光时间 <small>ms</small>
+                </label>
+                <input id="exposure" type="number" min="0.001" max="5000" step="0.001">
+              </div>
+              <div>
+                <label for="gain">增益 <small>倍</small>
+                </label>
+                <input id="gain" type="number" min="1" max="655.35" step="0.01">
+              </div>
+            </div>
+            <p class="guidance">45 fps 通常保持 12 ms，最多调至 18 ms 后试录。<br>对焦与光圈需手动旋转镜头。</p>
+            <p id="readback" class="readback">打开预览后，可查看相机实际采用的数值。</p>
+            <button id="save" class="secondary">保存并应用</button>
+          </div>
+          <details id="adjustments">
+            <summary>方案管理</summary>
+            <div class="new-scheme">
+              <label for="newName">另存方案名称</label>
+              <input id="newName" maxlength="80" placeholder="例如 顶视机位方案 A">
+              <button id="copy" class="text-button">另存为新方案</button>
+              <p class="hint">先停止预览再另存。未单独设置的编码参数沿用维护配置。</p>
+            </div>
+          </details>
+          <div class="record-actions">
+            <p class="hint">换方案或调整画面后，请先试录。</p>
+            <button id="record" class="primary">开始录制</button>
+            <div class="actions">
+              <button id="trial" class="secondary">试录一分钟</button>
+              <button id="stop" class="danger" disabled>停止并保存</button>
+            </div>
+            <p class="hint">试录 60 秒，每 20 秒一段。正式录制按上方设置。</p>
+          </div>
+        </section>
+      </div>
+      <section class="card progress" aria-label="录制状态">
+        <div class="status-row">
+          <div class="section-head">
+            <div>
+              <p class="eyebrow">录制状态</p>
+              <h2 id="stage" role="status">就绪</h2>
+            </div>
+            <button id="openOutput" class="secondary">打开保存目录</button>
+          </div>
+          <div class="metrics">
+            <div>
+              <span>已录制 / 剩余</span>
+              <strong id="timing">—</strong>
+            </div>
+            <div>
+              <span>实际采集帧率</span>
+              <strong id="fps">—</strong>
+            </div>
+            <div>
+              <span>已生成视频</span>
+              <strong id="segments">—</strong>
+            </div>
+            <div>
+              <span>视频容量 / 磁盘可用</span>
+              <strong id="size">—</strong>
+            </div>
+          </div>
+        </div>
+        <p id="runNote" class="hint">尚未开始录像。</p>
+        <p id="health" class="hint">
+        </p>
+        <p id="failure" class="failure" role="alert" hidden>
+        </p>
+        <details>
+          <summary>运行详情与日志</summary>
+          <p id="runPath" class="path">
+          </p>
+          <p id="logPath" class="path">
+          </p>
+          <button id="logButton" class="text-button">查看最近日志</button>
+          <pre id="log">
+          </pre>
+        </details>
+      </section>
+      <footer>关闭网页不会停止录像。请保留后台 CMD 窗口；停止后等待“已保存并检查”。</footer>
+    </main>
+    <dialog id="imagingDialog" aria-label="详细画面配置">
+      <form id="imagingForm">
+        <div class="section-head">
+          <div>
+            <p class="eyebrow">当前方案的画面参数</p>
+            <h2>详细画面配置</h2>
+          </div>
+          <button id="imagingCancel" type="button" class="text-button">取消</button>
+        </div>
+        <p id="imagingScheme" class="summary">
+        </p>
+        <p class="hint">只修改当前方案。保存时会重新打开正在运行的预览；正式录像与该方案使用同一组画面参数。</p>
+        <p id="imagingError" class="failure" role="alert" hidden>
+        </p>
+        <h3>白平衡</h3>
+        <div class="imaging-grid">
+          <div>
+            <label for="wbTemp">色温 <small>K</small>
+            </label>
+            <input id="wbTemp" type="number" required min="2000" max="15000" step="1">
+          </div>
+          <div>
+            <label for="wbTint">色调校正 Tint</label>
+            <input id="wbTint" type="number" required min="200" max="2500" step="1">
+          </div>
+        </div>
+        <h3>明暗与颜色</h3>
+        <div class="imaging-grid">
+          <div>
+            <label for="gamma">伽马</label>
+            <input id="gamma" type="number" required min="0.20" max="1.80" step="0.01">
+          </div>
+          <div>
+            <label for="contrast">对比度</label>
+            <input id="contrast" type="number" required min="-255" max="255" step="1">
+          </div>
+          <div>
+            <label for="brightness">亮度偏移</label>
+            <input id="brightness" type="number" required min="-255" max="255" step="1">
+          </div>
+          <div>
+            <label for="hue">色相</label>
+            <input id="hue" type="number" required min="-180" max="180" step="1">
+          </div>
+          <div>
+            <label for="saturation">饱和度</label>
+            <input id="saturation" type="number" required min="0" max="255" step="1">
+          </div>
+          <div>
+            <label for="sharpening">锐化强度</label>
+            <input id="sharpening" type="number" required min="0" max="500" step="1">
+          </div>
+        </div>
+        <p class="hint">伽马和亮度偏移改变图像显示效果，不替代曝光。锐化不能修复镜头虚焦。调整后请用真实场景试录回看。</p>
+        <details>
+          <summary>色阶与固定采集参数</summary>
+          <p class="hint">四通道色阶按 SDK 顺序保存。每项黑端必须小于白端；通常保留 0 / 255。</p>
+          <div id="levelFields" class="level-grid">
+          </div>
+          <p class="hint">当前链路固定为全画幅、8 位、不合并像素。此页不增加降噪控制；保留方案原有设置。对焦与光圈需要在镜头上调整。</p>
+        </details>
+        <div class="dialog-actions">
+          <button id="imagingSave" type="submit" class="primary">保存画面配置</button>
+        </div>
+      </form>
+    </dialog>
+  </body>
+</html>

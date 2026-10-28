@@ -3,16 +3,20 @@ import datetime as dt
 import hashlib
 import json
 from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from release_paths import EXCLUDED, release_source, safe_release_name
 
 kit = Path(__file__).resolve().parents[1]
-excluded = {'docs/package/manifest.json', 'config/*.json', '录制参数.toml',
-            '.git', '.git/**', '**/__pycache__/**', '*.pyc', '*.pyo'}
+excluded = EXCLUDED | {'docs/package/manifest.json', 'deprecated/config/*.json',
+                       'deprecated/录制参数.toml'}
 entries = []
 for path in sorted(kit.rglob('*')):
     relative = path.relative_to(kit)
-    if (not path.is_file() or '.git' in relative.parts or '__pycache__' in relative.parts
+    if (not path.is_file() or not safe_release_name(relative.as_posix())
             or any(relative.match(pattern) for pattern in excluded)):
         continue
+    release_source(kit, relative.as_posix())
     digest = hashlib.sha256()
     with path.open('rb') as source:
         for block in iter(lambda: source.read(1024 * 1024), b''):

@@ -13,6 +13,30 @@ import pc_environment as pc
 
 
 class EnvironmentTests(unittest.TestCase):
+    @unittest.skipUnless(sys.platform == 'win32', 'Windows PowerShell matching rules')
+    def test_inventory_detects_preview_but_not_idle_workbench(self):
+        # Replace CIM entirely: test the actual inventory classifier without
+        # inspecting hardware or depending on this computer's running apps.
+        fixtures = [
+            {'Name': 'python.exe', 'ProcessId': 11,
+             'CommandLine': 'python.exe "C:\\camera kit\\scripts\\operator_camera.py" --preview'},
+            {'Name': 'pythonw.exe', 'ProcessId': 12,
+             'CommandLine': 'pythonw.exe C:/kit/scripts/operator_console.py'},
+            {'Name': 'python.exe', 'ProcessId': 13,
+             'CommandLine': 'python.exe C:/kit/scripts/capture.py record'},
+            {'Name': 'python.exe', 'ProcessId': 14,
+             'CommandLine': 'python.exe C:/kit/scripts/not_operator_camera.py'},
+        ]
+        payload = json.dumps(fixtures).replace("'", "''")
+        script = ("[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new();"
+                  "$script:fixtures='" + payload + "' | ConvertFrom-Json;"
+                  "function Get-CimInstance { param($ClassName) "
+                  "if ($ClassName -eq 'Win32_Process') {$script:fixtures} else {throw 'stubbed'} };"
+                  + pc._INVENTORY_PS)
+        result = json.loads(pc._run(['powershell.exe', '-NoProfile', '-NonInteractive', '-Command', script], 12))
+        self.assertEqual([(p['pid'], p['kind']) for p in result['active_recording_processes']],
+                         [(11, 'calibration'), (13, 'capture')])
+
     def test_inventory_static_command_and_json(self):
         payload = {'os': {'caption': 'Windows'}, 'active_recording_processes': []}
         with patch.object(pc.subprocess, 'run', return_value=SimpleNamespace(returncode=0, stdout=json.dumps(payload).encode())) as run:

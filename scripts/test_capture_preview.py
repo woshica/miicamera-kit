@@ -13,14 +13,16 @@ from recording_profile import resolve_record_args
 
 
 class CapturePreviewTests(unittest.TestCase):
-    def run_recording(self, mode, enabled=True, status_mode=None, fail_capture=False):
+    def run_recording(self, mode, enabled=True, status_mode=None, fail_capture=False, expected_frames=6, fail_close=False):
         clock = NS(ns=1_000_000_000)
         observed = NS(preview=None, writer=None, status=None)
 
         class Camera:
             def StartPullModeWithCallback(self, *args): pass
             def Stop(self): pass
-            def Close(self): pass
+            def Close(self):
+                if fail_close:
+                    raise RuntimeError('fake camera close failed')
             def get_Option(self, option): return 0
             def WaitImageV4(self, timeout, buffer, a, b, c, info):
                 if fail_capture and len(observed.writer.frames) == 3:
@@ -116,14 +118,14 @@ class CapturePreviewTests(unittest.TestCase):
             stack.enter_context(patch('recording_status.RecordingStatus', Status))
             code = capture.run_capture(args)
             metadata = json.loads(next(Path(directory).glob('capture-*/capture.json')).read_text(encoding='utf-8'))
-        if fail_capture:
+        if fail_capture or fail_close:
             self.assertEqual(code, 1)
             self.assertEqual(metadata['status'], 'incomplete')
             return metadata, observed
         self.assertEqual(code, 0)
         self.assertEqual(metadata['status'], 'complete')
-        self.assertEqual(metadata['frames_captured'], 6)
-        self.assertEqual(len(observed.writer.frames), 6)
+        self.assertEqual(metadata['frames_captured'], expected_frames)
+        self.assertEqual(len(observed.writer.frames), expected_frames)
         self.assertEqual(metadata['sdk_sequence_gaps'], 0)
         if enabled:
             self.assertTrue(observed.preview.finished)

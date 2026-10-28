@@ -11,6 +11,7 @@ import unittest
 from unittest.mock import patch
 
 import diagnose_pc as doctor
+from operator_config import OperatorConfig
 
 
 class DiagnosticTests(unittest.TestCase):
@@ -61,7 +62,8 @@ class DiagnosticTests(unittest.TestCase):
                 return env if '--environment' in command else {'cameras': []}
             row = {'encoder': 'hevc_nvenc', 'label': 'NVIDIA HEVC', 'supported_by_recorder': True,
                    'functional': True, 'benchmark': {'meets_target': True}}
-            with patch.object(doctor, 'resolve_record_args', side_effect=resolve), \
+            with patch.object(doctor.sys, 'platform', 'win32'), \
+                    patch.object(doctor, 'resolve_record_args', side_effect=resolve), \
                     patch.object(doctor, 'probe_json', side_effect=probe) as probe_mock, \
                     patch.object(doctor, 'run_logged', return_value={'returncode': 0, 'timed_out': False}) as run, \
                     patch.object(doctor.shutil, 'disk_usage', return_value=NS(free=1 if low_space else 100*1024**3)), \
@@ -71,6 +73,7 @@ class DiagnosticTests(unittest.TestCase):
 
     def test_busy_or_unknown_occupancy_skips_every_heavy_check(self):
         for env in ({'active_recording_processes': [{'name': 'ImageView.exe', 'pid': 1}], 'errors': []},
+                    {'active_recording_processes': [{'name': 'python.exe', 'pid': 2, 'kind': 'calibration'}], 'errors': []},
                     {'active_recording_processes': [], 'errors': ['process_inventory_unavailable']},
                     {'active_recording_processes': [], 'errors': ['windows_inventory_unavailable_or_timed_out']}):
             report, probe, run, encoders = self.run_fake_diagnostic(env)
@@ -78,6 +81,45 @@ class DiagnosticTests(unittest.TestCase):
             run.assert_not_called()
             encoders.assert_not_called()
             self.assertNotIn('recording_test', report)
+
+    def test_default_reads_selected_workbench_scheme_and_preserves_settings(self):
+        with tempfile.TemporaryDirectory() as folder, redirect_stdout(io.StringIO()):
+            kit = Path(folder) / 'kit'
+            (kit / 'config').mkdir(parents=True)
+            template = doctor.KIT / 'config/operator-template.json'
+            (kit / 'config/operator-template.json').write_bytes(template.read_bytes())
+            settings = OperatorConfig(kit)
+            settings.initialize()
+            view = settings.create_scheme('Diagnostic selection', 'current',
+                                          {'exposure_ms': 17, 'gain_multiplier': 2})
+            settings.save(dict(view['daily'], output_dir=str(Path(folder) / 'selected-output'),
+                               duration_hours=2, segment_minutes=5))
+            original = {p.name: p.read_bytes() for p in settings.directory.iterdir()}
+            directory = Path(folder) / 'report'
+            directory.mkdir()
+            report = {'report_dir': str(directory), 'checks': [], 'encoders': []}
+            args = argparse.Namespace(config=None, output_dir=None, skip_camera=False)
+            # Busy preview must stop before camera, disk or encoder children.
+            environment = {'active_recording_processes': [{'kind': 'calibration'}]}
+            with patch.object(doctor, 'KIT', kit), patch.object(doctor.sys, 'platform', 'win32'), \
+                    patch.object(doctor, 'probe_json', return_value=environment) as probe, \
+                    patch.object(doctor, 'run_logged') as children, \
+                    patch('encoder_diagnostics.probe_encoders') as encoders:
+                doctor.run_diagnostics(args, report)
+            self.assertEqual(report['profile'], settings.resolved())
+            self.assertEqual(report['profile']['exposure_us'], 17000)
+            self.assertEqual(report['profile']['gain'], 200)
+            snapshot = directory / 'operator-profile-tested.json'
+            self.assertEqual(json.loads(snapshot.read_text(encoding='utf-8')), settings.resolved())
+            self.assertEqual(original, {p.name: p.read_bytes() for p in settings.directory.iterdir()})
+            probe.assert_called_once()
+            children.assert_not_called()
+            encoders.assert_not_called()
+
+    def test_explicit_config_does_not_initialize_operator_settings(self):
+        with patch.object(doctor, 'OperatorConfig') as settings:
+            self.run_fake_diagnostic({'active_recording_processes': [{'kind': 'capture'}]})
+        settings.assert_not_called()
 
     def test_low_disk_space_does_not_write_probe_or_start_camera(self):
         env = {'errors': [], 'active_recording_processes': [], 'volume': {'free_bytes': 1}}

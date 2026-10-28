@@ -207,6 +207,23 @@ def validate_video_counts(run_dir, segments, progress=None):
 
 
 def run_capture(args):
+    monitor = None
+    try:
+        if getattr(args, 'control_dir', None):
+            from operator_camera import CameraMonitor
+            monitor = CameraMonitor(args.control_dir)
+            monitor.publish('starting', frames=0)
+        return _run_capture(args, monitor)
+    except Exception as exc:
+        if monitor is not None:
+            monitor.publish('incomplete', frames=0, error=f'{type(exc).__name__}: {exc}')
+        raise
+    finally:
+        if monitor is not None:
+            monitor.finish()
+
+
+def _run_capture(args, monitor=None):
     requested_encoder = getattr(args, 'encoder', None)
     if args.command == 'record':
         if not FFMPEG.is_file() or not FFPROBE.is_file():
@@ -239,7 +256,7 @@ def run_capture(args):
     frames = gaps = validated_segments = 0
     first_frame_ns = last_frame_ns = None
     awake = False
-    result = {"status": "incomplete", "error": None}
+    result = {"status": "incomplete", "error": None, "stopped_by_user": False}
 
     def announce(message, error=False):
         # The status worker owns the live console block; permanent messages
@@ -251,8 +268,6 @@ def run_capture(args):
 
     def publish_status(stage, validating_segment=None):
         nonlocal status_fault
-        if status_display is None or status_fault:
-            return
         try:
             elapsed_s = capture_elapsed_s
             if elapsed_s is None:
@@ -260,6 +275,16 @@ def run_capture(args):
             cadence = ((frames - 1) * 1e9 / (last_frame_ns - first_frame_ns)
                        if frames > 1 and last_frame_ns > first_frame_ns else None)
             jobs = getattr(writer, 'jobs', None)
+            if monitor is not None:
+                monitor.publish(stage, elapsed_s=elapsed_s, frames=frames,
+                                measured_fps=cadence, sequence_gaps=gaps,
+                                queue_depth=jobs.qsize() if jobs is not None else 0,
+                                queue_capacity=status_queue_capacity,
+                                run_dir=str(run_dir) if run_dir else None,
+                                error=result['error'], readback=result.get('camera_settings_readback'),
+                                stopped_by_user=result['stopped_by_user'])
+            if status_display is None or status_fault:
+                return
             status_display.publish(stage=stage, elapsed_s=elapsed_s, frames=frames,
                                    measured_fps=cadence, sequence_gaps=gaps,
                                    queue_depth=jobs.qsize() if jobs is not None else 0,
@@ -305,6 +330,8 @@ def run_capture(args):
             if final_size != (width, height):
                 raise RuntimeError(f'Final image size after imaging settings is {final_size}, expected {(width, height)}')
             settings['final_image_size'] = list(final_size)
+        if monitor is not None:
+            monitor.width, monitor.height = width, height
         result.update({"camera": describe(dev, mii), "width": width, "height": height,
                        "requested_fps": args.fps, "camera_settings_readback": settings, "exposure_us": args.exposure_us,
                        "gain": args.gain, "encoding_timing": "CFR; frame n displayed at n/requested_fps; frames.csv holds acquisition times"})
@@ -393,6 +420,9 @@ def run_capture(args):
                 status_fault = str(exc)
         while True:
             now_ns = time.monotonic_ns()
+            if monitor is not None and monitor.stop_requested():
+                result['stopped_by_user'] = True
+                break
             if args.command == "record" and now_ns - start_ns >= args.duration * 1e9:
                 break
             if fatal:
@@ -436,6 +466,8 @@ def run_capture(args):
             # Both consumers share the immutable copy; only the writer must keep every frame.
             rgb = buffer.raw[:width * height * 3]
             writer.submit(rgb, meta)
+            if monitor is not None:
+                monitor.offer(rgb)
             if preview_active:
                 try:
                     live_preview.offer(rgb)
@@ -484,6 +516,7 @@ def run_capture(args):
         announce(result["error"], error=True)
         return 130 if isinstance(exc, KeyboardInterrupt) else 1
     finally:
+        was_success = result['status'] == 'complete'
         if capture_elapsed_s is None and start_ns is not None:
             capture_elapsed_s = (time.monotonic_ns() - start_ns) / 1e9
         if result['error']:
@@ -505,6 +538,11 @@ def run_capture(args):
                 writer.finish()
             except Exception as exc:
                 result["error"] = result["error"] or f"Writer shutdown: {exc}"
+        if monitor is not None:
+            if result['error']:
+                result['status'] = 'incomplete'
+            publish_status(result['status'])
+            monitor.finish()
         if run_dir:
             if result['error']:
                 result['status'] = 'incomplete'
@@ -520,6 +558,8 @@ def run_capture(args):
             result["segments"] = list(result.get("segments", []))
             (run_dir / "capture.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             print(f"Run metadata: {run_dir / 'capture.json'}")
+        if was_success and result['error']:
+            return 1
 
 
 def positive_float(value):
@@ -550,6 +590,7 @@ def main(argv=None):
     snap = sub.add_parser("snapshot", help="Save one full-resolution RGB PNG without overwriting")
     snap.add_argument("--output", required=True, type=Path)
     rec = sub.add_parser("record", help="Capture segmented MKV plus per-frame CSV and capture.json")
+    rec.add_argument('--control-dir', type=Path, help='Local operator status/preview and graceful stop directory')
     rec.add_argument('--config', type=Path, help='JSON or TOML recording profile; explicit command-line values override it')
     rec.add_argument('--dry-run', action='store_true', help='Validate and print resolved profile without opening camera')
     rec.add_argument("--output-dir", type=Path)
@@ -609,6 +650,10 @@ def main(argv=None):
     try:
         return run_capture(args)
     except Exception as exc:
+        if getattr(args, 'control_dir', None):
+            from operator_camera import atomic_write
+            args.control_dir.mkdir(parents=True, exist_ok=True)
+            atomic_write(args.control_dir / 'status.json', json.dumps({'stage': 'incomplete', 'error': str(exc)}).encode('utf-8'))
         print(f'Capture could not start: {exc}', file=sys.stderr)
         return 1
 

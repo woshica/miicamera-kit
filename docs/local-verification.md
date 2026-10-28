@@ -84,7 +84,7 @@
 
 ## 推荐配置接入验证（2026-10-19，旧 quality 模式历史记录）
 
-新增 `config/mouse-4k45-recommended.json`，菜单 10/11 与独立启动入口读取这份文件。原 `capture-defaults.json` 继续服务旧菜单。该阶段推荐配置为 4K 45 fps、手动 10 ms、增益 100%、5 分钟分段、GOP 45 帧、B 帧 0；自动检测 NVENC，否则选择 libx264。NVENC 使用 VBR/CQ 19、不设置目标码率；软件使用 CRF 18。二者不是 ImageView 质量百分数。下列记录属于旧配置，当前每小时分段及限码率配置的结果另列。
+新增 `deprecated/config/mouse-4k45-recommended.json`，菜单 10/11 与独立启动入口读取这份文件。原 `capture-defaults.json` 继续服务旧菜单。该阶段推荐配置为 4K 45 fps、手动 10 ms、增益 100%、5 分钟分段、GOP 45 帧、B 帧 0；自动检测 NVENC，否则选择 libx264。NVENC 使用 VBR/CQ 19、不设置目标码率；软件使用 CRF 18。二者不是 ImageView 质量百分数。下列记录属于旧配置，当前每小时分段及限码率配置的结果另列。
 
 配置解析、覆盖、成像写入/读回错误检查和编码分段共 14 项离线测试通过；两种本机编码器均用合成画面验证了 49 帧按 21/21/7 分段、CSV 数量一致、关键帧间距和无 B 帧。`--dry-run` 验证了推荐配置及 30 fps/60 秒命令行覆盖，帧率覆盖会同步选择对应相机速度档位。这些是软件功能验证，不是 4K 长时吞吐验收。
 
@@ -126,7 +126,7 @@
 
 ## CMD 启动入口修复（2026-10-21）
 
-从非工具包目录运行包内 Python 和 `scripts/menu.py`，复现了用户截图中的 `ModuleNotFoundError: No module named 'recording_profile'`。模块文件存在；包内 Python 3.12 的 `python312._pth` 启用隔离搜索，默认只包含标准库 ZIP 和运行时目录。单独加入 `scripts/` 后模块立即可导入。采集入口已处理该路径，菜单入口此前遗漏；既有采集验证和 unittest discovery 没有覆盖用户双击 CMD 的启动路径。
+从非工具包目录运行包内 Python 和 `deprecated/scripts/menu.py`，复现了用户截图中的 `ModuleNotFoundError: No module named 'recording_profile'`。模块文件存在；包内 Python 3.12 的 `python312._pth` 启用隔离搜索，默认只包含标准库 ZIP 和运行时目录。单独加入 `scripts/` 后模块立即可导入。采集入口已处理该路径，菜单入口此前遗漏；既有采集验证和 unittest discovery 没有覆盖用户双击 CMD 的启动路径。
 
 已在 `menu.py` 导入同目录模块前，根据 `__file__` 加入包内 `scripts/`，与采集入口保持一致，不修改运行时的隔离配置。新增 `scripts/test_launchers.py`，实际通过 CMD 启动三个菜单/录制入口，在包外临时目录执行：主菜单输入 0 退出，两个推荐入口使用相对输出路径触发参数拒绝，均不访问相机。修复前三个入口都复现相同导入错误，修复后全部通过；原始菜单复现命令也正常展示菜单并退出。原厂预览快捷入口共用同一个修正后的菜单模块。
 

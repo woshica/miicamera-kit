@@ -14,6 +14,7 @@ import uuid
 KIT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(KIT / 'scripts'))
 from recording_profile import resolve_record_args
+from operator_config import OperatorConfig
 
 PYTHON = KIT / 'runtime/python/python.exe'
 FFMPEG = KIT / 'runtime/ffmpeg/bin/ffmpeg.exe'
@@ -194,7 +195,7 @@ def render_report(report):
               '1. 本工具直接支持libx264、libx265、h264_nvenc、hevc_nvenc。Intel QSV/AMD AMF即使探测通过，也不能直接填入当前录制配置。',
               '2. 小片通过只说明驱动与编码器能工作。合成4K短测包括启动/滤镜成本，不包含相机USB采集、Python送帧和写盘；速度达标也不等于真实45fps稳定。',
               '3. 当前配置试录不通过时，先看失败原因及日志。不要因有显卡或小片成功，就直接开始无人值守长录。',
-              '4. 调整录制参数.toml后重新诊断；建议先用“试录当前配置一分钟.cmd”检查实际小鼠画质与分段，再逐步延长。',
+              '4. 在工作台选择并保存拍摄方案后重新诊断；建议先用工作台“一分钟试录”检查实际小鼠画质与分段，再逐步延长。',
               '5. 磁盘小文件测试受缓存影响，只能排查权限、空间和明显异常，不证明持续写入性能。',
               '6. 保存本目录的report.txt、report.json及日志便于定位；不会自动上传。', '']
     return '\n'.join(lines)
@@ -214,6 +215,15 @@ def run_diagnostics(args, report):
     check(report, '运行平台', 'pass', 'Windows 64位Python运行正常。')
     resolved = argparse.Namespace(config=args.config, duration=None, output_dir=args.output_dir)
     try:
+        if resolved.config is None:
+            settings = OperatorConfig(KIT)
+            settings.initialize()
+            # Resolve the selected scheme once; subsequent probes use this same
+            # validated snapshot without changing the workbench's settings.
+            profile_snapshot = settings.resolved()
+            resolved.config = directory / 'operator-profile-tested.json'
+            resolved.config.write_text(json.dumps(profile_snapshot, ensure_ascii=False, indent=2)
+                                       + '\n', encoding='utf-8')
         resolve_record_args(resolved)
         profile = resolved.resolved_profile
         report['profile'] = profile
@@ -232,7 +242,7 @@ def run_diagnostics(args, report):
     active = env.get('active_recording_processes', [])
     if active:
         check(report, '相机或编码占用', 'warn', '检测到正在运行的相机/编码软件：' + str(active)
-              + '。本次跳过压力测试和相机试录；请停止自己的录制并关闭ImageView后重跑。')
+              + '。本次跳过压力测试和相机试录；请停止录制、关闭工作台实时预览及ImageView后重跑。')
         return
     if any('process' in str(e).lower() or '进程' in str(e)
            or 'windows_inventory' in str(e).lower() for e in env.get('errors', [])):
@@ -327,7 +337,7 @@ def run_diagnostics(args, report):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--config', type=Path, default=KIT / '录制参数.toml')
+    parser.add_argument('--config', type=Path, help='Explicit legacy/JSON profile; defaults to the workbench selected scheme')
     parser.add_argument('--output-dir', type=Path, help='Test recording destination without modifying the configuration')
     parser.add_argument('--report-root', type=Path, default=default_report_root())
     parser.add_argument('--skip-camera', action='store_true', help='Skip the 20-second real camera recording')

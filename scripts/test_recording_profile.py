@@ -9,7 +9,7 @@ from recording_profile import KIT, legacy_profile, load_profile, resolve_record_
 
 class RecordingProfileTests(unittest.TestCase):
     def test_official_crf_profile_and_overrides(self):
-        args = argparse.Namespace(config=KIT/'config/mouse-4k45-official-crf.json', duration=60,
+        args = argparse.Namespace(config=KIT/'deprecated/config/mouse-4k45-official-crf.json', duration=60,
                                   output_dir=KIT.parent/'test-recordings', crf=22,
                                   segment_seconds=20, gop_frames=None)
         resolve_record_args(args)
@@ -27,7 +27,7 @@ class RecordingProfileTests(unittest.TestCase):
                 validate_profile(dict(args.resolved_profile, **updates))
 
     def test_hevc_trial_and_cli_override(self):
-        args = argparse.Namespace(config=KIT/'config/mouse-4k45-hevc-trial.json', duration=60,
+        args = argparse.Namespace(config=KIT/'deprecated/config/mouse-4k45-hevc-trial.json', duration=60,
                                   output_dir=KIT.parent/'test-recordings', nvenc_cq=26,
                                   segment_seconds=20, gop_frames=None)
         resolve_record_args(args)
@@ -44,14 +44,14 @@ class RecordingProfileTests(unittest.TestCase):
             validate_profile(invalid)
 
     def test_profile_has_recommended_values(self):
-        profile, source = load_profile(KIT / 'config/mouse-4k45-recommended.json')
+        profile, source = load_profile(KIT / 'deprecated/config/mouse-4k45-recommended.json')
         self.assertEqual((profile['fps'], profile['speed_level'], profile['gop_frames']), (45, 4, 45))
         self.assertEqual((profile['segment_seconds'], profile['duration_hours']), (3600, 72))
         self.assertEqual((profile['rate_control'], profile['bitrate_mbps'], profile['maxrate_mbps']), ('capped_vbr', 24, 26))
         self.assertEqual(len(source['sha256']), 64)
 
     def test_cli_override_preserves_other_profile_values(self):
-        args = argparse.Namespace(config=KIT/'config/mouse-4k45-recommended.json', duration=60,
+        args = argparse.Namespace(config=KIT/'deprecated/config/mouse-4k45-recommended.json', duration=60,
                                   output_dir=KIT.parent/'test-recordings', gop_frames=90)
         resolve_record_args(args)
         self.assertEqual(args.duration, 60)
@@ -68,7 +68,7 @@ class RecordingProfileTests(unittest.TestCase):
         self.assertIsNone(args.imaging)
 
     def test_fps_override_selects_matching_camera_speed(self):
-        args = argparse.Namespace(config=KIT/'config/mouse-4k45-recommended.json', duration=60,
+        args = argparse.Namespace(config=KIT/'deprecated/config/mouse-4k45-recommended.json', duration=60,
                                   output_dir=KIT.parent/'test-recordings', fps=30, gop_frames=None)
         resolve_record_args(args)
         self.assertEqual((args.fps, args.speed_level), (30, 2))
@@ -93,13 +93,13 @@ class RecordingProfileTests(unittest.TestCase):
                     validate_profile(profile)
 
     def test_storage_budget_under_decimal_tb_with_margin(self):
-        profile, _ = load_profile(KIT/'config/mouse-4k45-recommended.json')
+        profile, _ = load_profile(KIT/'deprecated/config/mouse-4k45-recommended.json')
         plan = storage_plan(profile)
         self.assertEqual(plan['target_video_bytes'], 777600000000)
         self.assertEqual(plan['ceiling_video_bytes_at_nominal_fps'], 842400000000)
         self.assertLess(plan['planned_recording_bytes_with_margin'], 950000000000)
         self.assertLess(plan['required_free_bytes'], 1000000000000)
-        args = argparse.Namespace(config=KIT/'config/mouse-4k45-recommended.json', duration=168*3600,
+        args = argparse.Namespace(config=KIT/'deprecated/config/mouse-4k45-recommended.json', duration=168*3600,
                                   output_dir=KIT.parent/'test-recordings', gop_frames=None)
         with self.assertRaisesRegex(ValueError, 'exceeds max_recording_gb'):
             resolve_record_args(args)

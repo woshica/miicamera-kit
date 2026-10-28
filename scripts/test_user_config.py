@@ -8,7 +8,10 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-import menu
+import importlib.util
+_MENU_SPEC = importlib.util.spec_from_file_location('archived_menu', Path(__file__).resolve().parents[1] / 'deprecated/scripts/menu.py')
+menu = importlib.util.module_from_spec(_MENU_SPEC)
+_MENU_SPEC.loader.exec_module(menu)
 from recording_profile import KIT, default_output, legacy_profile, load_profile, resolve_record_args
 
 
@@ -56,7 +59,7 @@ class UserConfigTests(unittest.TestCase):
         self.assertEqual(source['path'], str(self.path.resolve()))
 
     def test_imaging_denoise_omission_is_only_null_normalization(self):
-        p, _ = load_profile(KIT / 'config/mouse-4k45-recommended.json')
+        p, _ = load_profile(KIT / 'deprecated/config/mouse-4k45-recommended.json')
         self.profile['imaging'] = p['imaging']
         self.write()
         loaded, _ = load_profile(self.path)

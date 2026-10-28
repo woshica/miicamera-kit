@@ -8,6 +8,9 @@ import hashlib
 import json
 from pathlib import Path
 import zipfile
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from release_paths import release_source
 
 
 def main():
@@ -26,16 +29,12 @@ def main():
     expected = {entry['path']: entry for entry in manifest['files']}
     if len(expected) != len(manifest['files']):
         raise ValueError('Duplicate manifest paths')
-    editable = ['录制参数.toml'] + [p.relative_to(kit).as_posix()
-                                     for p in sorted((kit / 'config').glob('*.json'))]
+    editable = ['deprecated/录制参数.toml'] + [p.relative_to(kit).as_posix()
+                                     for p in sorted((kit / 'deprecated/config').glob('*.json'))]
     names = sorted(set(expected) | set(editable) | {'docs/package/manifest.json'})
     files = []
     for name in names:
-        source = (kit / name).resolve()
-        if (kit not in source.parents or '.git' in source.relative_to(kit).parts
-                or '__pycache__' in source.relative_to(kit).parts
-                or source.suffix.lower() in ('.pyc', '.pyo')):
-            raise ValueError(f'Unsafe manifest path: {name}')
+        source = release_source(kit, name)
         if not source.is_file():
             raise FileNotFoundError(name)
         files.append((name, source))

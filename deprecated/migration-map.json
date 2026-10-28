@@ -1,0 +1,110 @@
+[
+  {
+    "from": "录制参数.toml",
+    "to": "deprecated/录制参数.toml"
+  },
+  {
+    "from": "scripts/menu.py",
+    "to": "deprecated/scripts/menu.py"
+  },
+  {
+    "from": "打开官方录制软件.cmd",
+    "to": "deprecated/打开官方录制软件.cmd"
+  },
+  {
+    "from": "config/capture-defaults.json",
+    "to": "deprecated/config/capture-defaults.json"
+  },
+  {
+    "from": "config/mouse-4k45-recommended.json",
+    "to": "deprecated/config/mouse-4k45-recommended.json"
+  },
+  {
+    "from": "config/mouse-4k45-official-crf.json",
+    "to": "deprecated/config/mouse-4k45-official-crf.json"
+  },
+  {
+    "from": "config/mouse-4k45-hevc-trial.json",
+    "to": "deprecated/config/mouse-4k45-hevc-trial.json"
+  },
+  {
+    "from": "test/按旧配置直接录制.cmd",
+    "to": "deprecated/test/按旧配置直接录制.cmd"
+  },
+  {
+    "from": "test/检查录制配置.cmd",
+    "to": "deprecated/test/检查录制配置.cmd"
+  },
+  {
+    "from": "test/启动相机工具.cmd",
+    "to": "deprecated/test/启动相机工具.cmd"
+  },
+  {
+    "from": "test/试录当前配置一分钟.cmd",
+    "to": "deprecated/test/试录当前配置一分钟.cmd"
+  },
+  {
+    "from": "test/legacy/打开相机预览.cmd",
+    "to": "deprecated/test/legacy/打开相机预览.cmd"
+  },
+  {
+    "from": "test/legacy/按官方参数CRF录制.cmd",
+    "to": "deprecated/test/legacy/按官方参数CRF录制.cmd"
+  },
+  {
+    "from": "test/legacy/按推荐配置录制.cmd",
+    "to": "deprecated/test/legacy/按推荐配置录制.cmd"
+  },
+  {
+    "from": "test/legacy/推荐配置试录60秒.cmd",
+    "to": "deprecated/test/legacy/推荐配置试录60秒.cmd"
+  },
+  {
+    "from": "test/legacy/试录H265一分钟.cmd",
+    "to": "deprecated/test/legacy/试录H265一分钟.cmd"
+  },
+  {
+    "from": "test/legacy/试录官方参数CRF一分钟.cmd",
+    "to": "deprecated/test/legacy/试录官方参数CRF一分钟.cmd"
+  },
+  {
+    "from": "docs/完整使用说明.md",
+    "to": "deprecated/docs/完整使用说明.md"
+  },
+  {
+    "from": "docs/客户现场先看.md",
+    "to": "deprecated/docs/客户现场先看.md"
+  },
+  {
+    "from": "docs/录制参数说明.md",
+    "to": "deprecated/docs/录制参数说明.md"
+  },
+  {
+    "from": "docs/official-recording-workflow.md",
+    "to": "deprecated/docs/official-recording-workflow.md"
+  },
+  {
+    "from": "docs/official-crf-recording.md",
+    "to": "deprecated/docs/official-crf-recording.md"
+  },
+  {
+    "from": "docs/hevc-recording-trial.md",
+    "to": "deprecated/docs/hevc-recording-trial.md"
+  },
+  {
+    "from": "docs/cq30-user-config-trial.md",
+    "to": "deprecated/docs/cq30-user-config-trial.md"
+  },
+  {
+    "from": "docs/live-preview-validation.md",
+    "to": "deprecated/docs/live-preview-validation.md"
+  },
+  {
+    "from": "scripts/test_pc_environment.pyc",
+    "to": "deprecated/cache/test_pc_environment.pyc"
+  },
+  {
+    "from": "scripts/test_video_writer.pyc",
+    "to": "deprecated/cache/test_video_writer.pyc"
+  }
+]

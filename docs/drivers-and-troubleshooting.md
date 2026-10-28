@@ -4,7 +4,7 @@
 
 | 现象 | 检查与处理 |
 | --- | --- |
-| 双击 CMD 报 `No module named 'recording_profile'` | 2026-10-21 已修复菜单入口遗漏脚本搜索路径的问题。便携 Python 默认隔离模块路径，更新后的 `scripts/menu.py` 会根据自身位置加载同目录模块，不依赖当前目录或系统 Python。若在旧副本上复现，请复制完整更新后的工具包；原厂 ImageView 不受此脚本错误影响。 |
+| 双击 CMD 报 `No module named 'recording_profile'` | 2026-10-21 已修复菜单入口遗漏脚本搜索路径的问题。便携 Python 默认隔离模块路径，更新后的 `deprecated/scripts/menu.py` 会根据自身位置加载同目录模块，不依赖当前目录或系统 Python。若在旧副本上复现，请复制完整更新后的工具包；原厂 ImageView 不受此脚本错误影响。 |
 | `Expected exactly one camera; found 0` | 检查数据线、电源和 USB 插口；拔插后重新自检。设备管理器有感叹号时，使用原厂安装程序安装驱动。 |
 | 找到多台相机 | 目前自动录像脚本只处理一台；暂时仅连接本次要用的相机。 |
 | 找到相机但无法打开 | 关闭 ImageView 实时窗口、OBS 或其他占用相机的软件，再试。 |

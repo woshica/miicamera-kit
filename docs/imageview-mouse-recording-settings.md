@@ -1,8 +1,8 @@
 # ImageView 小鼠录像设置：现场试拍起点
 
-> 本文中的命令、配置和资源路径均相对于软件包根目录 `miicamera-kit/`；辅助入口在 `test/`，旧方案入口在 `test/legacy/`。
+> 本文中的命令、配置和资源路径均相对于软件包根目录 `miicamera-kit/`；辅助入口在 `test/`，旧方案入口在 `deprecated/test/legacy/`。
 
-**2026-10-25 更新：主要录制方式为官方 ImageView，使用用户已认可的 MP4／H.265、质量100。** 操作与长录功能边界见 [官方录制流程](official-recording-workflow.md)。下文关于 `mouse-4k45-recommended.json`、24/26 Mbps、CSV及907 GB的内容属于原脚本方案，不能当作官方录像设置或容量要求。
+**2026-10-25 更新：主要录制方式为官方 ImageView，使用用户已认可的 MP4／H.265、质量100。** 操作与长录功能边界见 [官方录制流程](../deprecated/docs/official-recording-workflow.md)。下文关于 `mouse-4k45-recommended.json`、24/26 Mbps、CSV及907 GB的内容属于原脚本方案，不能当作官方录像设置或容量要求。
 
 对象为 IP108300D / E3ISPM08300KPD 配 8 mm 镜头。核对日期：2026-10-19。**下列均为试拍起点，尚非小鼠实验验证标准。**[随包中文手册](../runtime/imageview/help/hans.pdf)和[英文手册](../runtime/imageview/help/en.pdf)描述通用 ImageView 功能；每项须以本型号当前 GUI 可见性、读回值和实际录像验收。下文中文 PDF 页与手册印刷页脚相同。GUI 与 SDK 设置独立；此前 SDK 路径 4K、45 fps、10 ms 录 5 分钟通过，不能证明 ImageView 同样稳定，也不能证明 45 fps 足以捕捉所有快速动作。
 
@@ -16,7 +16,7 @@
 | 必做 | 帧率滑块取稳定较高档，目标 45 fps，核对实际录像；只有确有带宽/处理瓶颈时才单独试硬件 ROI，保证整个活动区域在框内。 | 预览分辨率、录像分辨率、实际帧率分别核对。[中 PDF/印刷 22–23](../runtime/imageview/help/hans.pdf) §4.9、4.14。本型号有硬件 ROI 能力，但不能预先保证裁剪后的帧率。 |
 | 必做 | 普通连续录像，关 Time-lapse；若向导有帧率倍数，选正常时间 **x1**，核对时间限制。沿用用户已认可的 MP4/H.265、质量100，检查时长、文件大小和写盘。 | [中 PDF/印刷 63–65、134](../runtime/imageview/help/hans.pdf) §10.3、15.1.2。旧手册列 MP4/H.264、H.265，质量1–100、默认100；**当前 UI 为25–100，以当前可输入范围为准**。质量100不等于已证实无损。手册倍率是录像时序选项，不能当采集fps；“快速录像”会继承上次编码和延时设置。H.265已在本机样片中确认，客户机仍检查实际编码器与试录结果。 |
 
-若使用随包自动录像工具，菜单 **5** 是旧通用入口，继续读取 `config/capture-defaults.json`，仍为 300 秒分段且无本推荐配置的码率限制；下述 1 小时分段和容量预算只适用于菜单 **10/11** 与两个快捷方式「test/legacy/按推荐配置录制.cmd」「test/legacy/推荐配置试录60秒.cmd」。菜单 **10** 默认计划时长 72 小时，菜单 **11** 使用同一配置但时长为 60 秒。配置见 [README 自动录像说明](完整使用说明.md#自动录像与设置) 和 [推荐 JSON](../config/mouse-4k45-recommended.json)。推荐值为 4K、45 fps、曝光 10 ms、增益 100（SDK 百分比）、3600 秒分段、GOP 45 帧、B 帧 0；编码器自动选可用 NVENC，否则回退到 libx264。使用 capped VBR，目标码率 24 Mbps、最大 26 Mbps、VBV 缓冲 52 Mbit；两种编码器路径都应用目标码率与上限，不使用 CRF/CQ（仅 quality 模式使用这些字段）。FFmpeg 的 `maxrate`、`bufsize` 见[官方编码器选项](https://ffmpeg.org/ffmpeg-codecs.html#Codec-Options)。该推荐路径会在开相机前校验配置；除降噪外，其余配置列出的成像字段会尝试写入并读回核验，已在 2026-10-19 的 60 秒推荐配置实机短录中完成读回核验。本型号 `get_Option(DENOISE)` 探测返回 `E_NOTIMPL`，JSON 中 `denoise: null` 表示脚本不控制额外降噪，不能据此称为已关闭。JSON 不是 GUI 参数导入文件，ImageView 仍须按本页单独设置。当前 capped VBR 配置另已通过 60 秒 NVENC 实机短录：2710 帧、45.2087714 fps，帧缺口、软件丢帧及缓冲溢出均为 0，临时 20 秒分段均完整解码；这不替代正式 3600 秒分段的等待验证或 72 小时长录。短录运行文件外推约 818.0 GB，属于容量估算而非长录实测。容量预算约需 907.25 GB；950 GB 是约每 2 秒及收尾检查的保护阈值，触发后停止并标记 `incomplete`，不是精确上限，也不保证录满 72 小时。限码率压缩可能更强，须在夜间与快速细节场景检查画质。
+若使用随包自动录像工具，菜单 **5** 是旧通用入口，继续读取 `deprecated/config/capture-defaults.json`，仍为 300 秒分段且无本推荐配置的码率限制；下述 1 小时分段和容量预算只适用于菜单 **10/11** 与两个快捷方式「deprecated/test/legacy/按推荐配置录制.cmd」「deprecated/test/legacy/推荐配置试录60秒.cmd」。菜单 **10** 默认计划时长 72 小时，菜单 **11** 使用同一配置但时长为 60 秒。配置见 [README 自动录像说明](../deprecated/docs/完整使用说明.md#自动录像与设置) 和 [推荐 JSON](../deprecated/config/mouse-4k45-recommended.json)。推荐值为 4K、45 fps、曝光 10 ms、增益 100（SDK 百分比）、3600 秒分段、GOP 45 帧、B 帧 0；编码器自动选可用 NVENC，否则回退到 libx264。使用 capped VBR，目标码率 24 Mbps、最大 26 Mbps、VBV 缓冲 52 Mbit；两种编码器路径都应用目标码率与上限，不使用 CRF/CQ（仅 quality 模式使用这些字段）。FFmpeg 的 `maxrate`、`bufsize` 见[官方编码器选项](https://ffmpeg.org/ffmpeg-codecs.html#Codec-Options)。该推荐路径会在开相机前校验配置；除降噪外，其余配置列出的成像字段会尝试写入并读回核验，已在 2026-10-19 的 60 秒推荐配置实机短录中完成读回核验。本型号 `get_Option(DENOISE)` 探测返回 `E_NOTIMPL`，JSON 中 `denoise: null` 表示脚本不控制额外降噪，不能据此称为已关闭。JSON 不是 GUI 参数导入文件，ImageView 仍须按本页单独设置。当前 capped VBR 配置另已通过 60 秒 NVENC 实机短录：2710 帧、45.2087714 fps，帧缺口、软件丢帧及缓冲溢出均为 0，临时 20 秒分段均完整解码；这不替代正式 3600 秒分段的等待验证或 72 小时长录。短录运行文件外推约 818.0 GB，属于容量估算而非长录实测。容量预算约需 907.25 GB；950 GB 是约每 2 秒及收尾检查的保护阈值，触发后停止并标记 `incomplete`，不是精确上限，也不保证录满 72 小时。限码率压缩可能更强，须在夜间与快速细节场景检查画质。
 
 其余按实际问题调整：
 

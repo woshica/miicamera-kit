@@ -26,6 +26,7 @@ try { $r.active_recording_processes=@(Get-CimInstance Win32_Process | ForEach-Ob
   if ($_.Name -match '(?i)^imageview.*\.exe$') {$kind='imageview'}
   elseif ($_.Name -match '(?i)^ffmpeg(?:\.exe)?$') {$kind='ffmpeg'}
   elseif ($_.Name -match '(?i)^python(?:w|[0-9.]*)?(?:\.exe)?$' -and $_.CommandLine -match '(?i)(?:^|[\\/"\s])capture\.py(?:["\s]|$)') {$kind='capture'}
+  elseif ($_.Name -match '(?i)^python(?:w|[0-9.]*)?(?:\.exe)?$' -and $_.CommandLine -match '(?i)(?:^|[\\/"\s])operator_camera\.py(?:["\s]|$)') {$kind='calibration'}
   if ($kind) {@{name=$_.Name;pid=$_.ProcessId;kind=$kind}}
 }) } catch {$r.errors+='process_inventory_unavailable'}
 $r | ConvertTo-Json -Depth 5 -Compress

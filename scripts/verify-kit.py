@@ -11,8 +11,8 @@ if not manifest_path.is_file():
     sys.exit(1)
 manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
 failed = []
-if not (kit / '录制参数.toml').is_file():
-    failed.append('录制参数.toml: missing editable configuration')
+if not (kit / 'config/operator-template.json').is_file():
+    failed.append('config/operator-template.json: missing installation template')
 for entry in manifest['files']:
     path = (kit / entry['path']).resolve()
     if kit not in path.parents:
@@ -29,5 +29,5 @@ for entry in manifest['files']:
 print(f'Checked {len(manifest["files"])} files; failures: {len(failed)}')
 for problem in failed:
     print(problem)
-print('录制参数.toml 和 config/ 中的 JSON 可由现场调整，不纳入固定文件哈希；启动录像时会校验参数。')
+print('config/operator/ 中的现场配置和 deprecated/ 中的旧可编辑配置不纳入固定文件哈希；安装模板参与校验。')
 sys.exit(1 if failed else 0)

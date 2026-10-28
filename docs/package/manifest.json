@@ -1,13 +1,46 @@
 {
   "format": 1,
-  "created_at_utc": "2026-10-26T08:13:39.238514+00:00",
+  "created_at_utc": "2026-10-28T11:26:04.033993+00:00",
   "excluded": [
+    "**/*.3gp",
+    "**/*.avi",
+    "**/*.flv",
+    "**/*.frames.csv",
+    "**/*.h264",
+    "**/*.h265",
+    "**/*.hevc",
+    "**/*.key",
+    "**/*.log",
+    "**/*.m2ts",
+    "**/*.m4v",
+    "**/*.mkv",
+    "**/*.mov",
+    "**/*.mp4",
+    "**/*.mpeg",
+    "**/*.mpg",
+    "**/*.mts",
+    "**/*.pem",
+    "**/*.pyc",
+    "**/*.pyo",
+    "**/*.tmp",
+    "**/*.ts",
+    "**/*.webm",
+    "**/*.wmv",
+    "**/.env*",
+    "**/.git/**",
+    "**/.pytest_cache/**",
+    "**/.venv/**",
     "**/__pycache__/**",
-    "*.pyc",
-    "*.pyo",
-    ".git",
-    ".git/**",
-    "config/*.json",
+    "**/camera-diagnostics/**",
+    "**/camera-recordings/**",
+    "**/diagnostics/**",
+    "**/recordings/**",
+    "config/.operator-*/**",
+    "config/operator/**",
+    "deprecated/cache/**",
+    "deprecated/config/*.json",
+    "deprecated/user-archive/**",
+    "deprecated/录制参数.toml",
     "docs/package/manifest.json",
     "录制参数.toml"
   ],
@@ -19,13 +52,133 @@
     },
     {
       "path": ".gitignore",
-      "bytes": 387,
-      "sha256": "bbdc2e668e985945f51fa13c10d3da3836d0335830345fd02ddf6013ebc7e6d1"
+      "bytes": 452,
+      "sha256": "128f935e3056c5259b77931a9b3e3c7d1ddead5161cc64033a0fb48a64389285"
     },
     {
-      "path": "docs/cq30-user-config-trial.md",
-      "bytes": 4723,
-      "sha256": "c2f5bb1e279428089c51879198bd6d61cc909da5884dda3d27933e79169340a6"
+      "path": "config/operator-template.json",
+      "bytes": 1971,
+      "sha256": "8362b27b91aee8ca3600b762c2e28e743e37676dedcc54f6750bd565060d8cff"
+    },
+    {
+      "path": "deprecated/docs/cq30-user-config-trial.md",
+      "bytes": 4886,
+      "sha256": "56b8b1b26abdb679300467a05004c7c3e2ea94a15e79de8706ef5d5bc45ca5db"
+    },
+    {
+      "path": "deprecated/docs/hevc-recording-trial.md",
+      "bytes": 10690,
+      "sha256": "9a8851988ddd80182704e5f96184816da30da8dbaa696769402e27d625a3b47c"
+    },
+    {
+      "path": "deprecated/docs/live-preview-validation.md",
+      "bytes": 8346,
+      "sha256": "83dfcc63f2577689007b36625a5d7a09cb565d881b087a36391111e16fb9c276"
+    },
+    {
+      "path": "deprecated/docs/official-crf-recording.md",
+      "bytes": 5650,
+      "sha256": "c3bc6ceb080b862165e46a02051d96b4902bc70ae10a067b6ba0c0c5a16845aa"
+    },
+    {
+      "path": "deprecated/docs/official-recording-workflow.md",
+      "bytes": 8171,
+      "sha256": "aa032e020b9c3d7cdbc673d8f913eb82958ca66383b285b1bb93646a6e38193b"
+    },
+    {
+      "path": "deprecated/docs/完整使用说明.md",
+      "bytes": 19361,
+      "sha256": "d72040140b09d3716acaea018fdecdbf3e81693ab9607153367b16673806abcb"
+    },
+    {
+      "path": "deprecated/docs/客户现场先看.md",
+      "bytes": 11375,
+      "sha256": "a4039919b3dbf8fbf39fd64d34172d34f4913f260e481568a15678a8f6736605"
+    },
+    {
+      "path": "deprecated/docs/录制参数说明.md",
+      "bytes": 20357,
+      "sha256": "b0eae8042e95db845855ef1263a2509b3af22c81ff29ca40b07c40617ef97a3a"
+    },
+    {
+      "path": "deprecated/migration-map.json",
+      "bytes": 3104,
+      "sha256": "a9a1a463b347929df1096429e4be122d0100acdc941ee710e4c57abebddebb8e"
+    },
+    {
+      "path": "deprecated/README.md",
+      "bytes": 754,
+      "sha256": "2cc5d319a1784608b8fe9944c82af87efc97072780546dd7e7d1a82ed39ccd34"
+    },
+    {
+      "path": "deprecated/scripts/menu.py",
+      "bytes": 16196,
+      "sha256": "bdb5a8a4992e6a927a0a4d6be7a3ecbc622c71c5c2aadf584dd870432795dccd"
+    },
+    {
+      "path": "deprecated/test/legacy/打开相机预览.cmd",
+      "bytes": 121,
+      "sha256": "566d8d3ddd119eff6911c3ef5933fed7a25c89ad656ed746fc43ee649d6389f1"
+    },
+    {
+      "path": "deprecated/test/legacy/按官方参数CRF录制.cmd",
+      "bytes": 133,
+      "sha256": "c28524aba8e35349d15e95369b269ec7872cc110e51a779b2e691ec07ba49402"
+    },
+    {
+      "path": "deprecated/test/legacy/按推荐配置录制.cmd",
+      "bytes": 132,
+      "sha256": "f1a6cb43ab1d9f4d025b800cddc67fb5e9c571b52057130159aa41f37f0fb6dd"
+    },
+    {
+      "path": "deprecated/test/legacy/推荐配置试录60秒.cmd",
+      "bytes": 137,
+      "sha256": "f30ca208c285c1677a865a79d38d51d954508d5036bd3ee875c9a8cf1fc313ef"
+    },
+    {
+      "path": "deprecated/test/legacy/试录H265一分钟.cmd",
+      "bytes": 590,
+      "sha256": "2337f5af14408f826ef8541c1a3825cfc11ffa586d3e67fc1f8d6a8f1cfe704a"
+    },
+    {
+      "path": "deprecated/test/legacy/试录官方参数CRF一分钟.cmd",
+      "bytes": 138,
+      "sha256": "a290896e13a966289b445ac8800842ab33828d59906bfd4c35abe96695c1b4f6"
+    },
+    {
+      "path": "deprecated/test/启动相机工具.cmd",
+      "bytes": 112,
+      "sha256": "3fd75d320d509bf1119ecfd66f0825901657d21e89e69eca4a9c30a96705bbe9"
+    },
+    {
+      "path": "deprecated/test/按旧配置直接录制.cmd",
+      "bytes": 196,
+      "sha256": "13c742e267761796b6ad335fd18a087ba91f63267cf1b8495dc23d19bfd9f188"
+    },
+    {
+      "path": "deprecated/test/检查录制配置.cmd",
+      "bytes": 202,
+      "sha256": "1574f5a20b2464f986bfdf3a35199983440073a35e617b56de62808265478a92"
+    },
+    {
+      "path": "deprecated/test/试录当前配置一分钟.cmd",
+      "bytes": 201,
+      "sha256": "42d0dbf1fd867aec3a15b6b9d3eb6853ed3a6dc420f5a1f6e91ff67cb54440ee"
+    },
+    {
+      "path": "deprecated/打开官方录制软件.cmd",
+      "bytes": 109,
+      "sha256": "0ceef2c546f6743b115a5a06c5346da25180d66d7e4a6f6b6e43b1d76500ff57"
+    },
+    {
+      "path": "docs/automatic-update-feasibility.md",
+      "bytes": 7370,
+      "sha256": "aeb706fe54c345c965ea8e9dfb77b0587bb8667e0fb71164644113e128a8033c"
+    },
+    {
+      "path": "docs/customer-download-guide.html",
+      "bytes": 12779,
+      "sha256": "c9d93605b891ccfb990e88f851d03de5354b81fd9ba11795d499251383720634"
     },
     {
       "path": "docs/diagnosis-and-vendor-questions.md",
@@ -34,38 +187,23 @@
     },
     {
       "path": "docs/drivers-and-troubleshooting.md",
-      "bytes": 4774,
-      "sha256": "90de5631d1df09afba08dfa6f50317318c83b8a99a1fd451a347c42db22b18b4"
-    },
-    {
-      "path": "docs/hevc-recording-trial.md",
-      "bytes": 10486,
-      "sha256": "80a2fefd5d9d6911147429c179305d15e858c06e4a3b917064dfdb677c0dbdf9"
+      "bytes": 4815,
+      "sha256": "700bf947bec2e7ff79c604f4dba73e17e7981025a9b154d51db0e9379672fed5"
     },
     {
       "path": "docs/imageview-mouse-recording-settings.md",
-      "bytes": 10684,
-      "sha256": "3dba7edff27910b50d19d18ab74f7b37f96958e5b318ab6b9c1ffa45798a1a55"
-    },
-    {
-      "path": "docs/live-preview-validation.md",
-      "bytes": 8169,
-      "sha256": "57c292dd6d1151ea7ba7f0c844aac235852661d72e5c62540111e73932c009b1"
+      "bytes": 10779,
+      "sha256": "5d37693761ee463e809df67450d6eb097b50eb0c1b338178840d085b25dda016"
     },
     {
       "path": "docs/local-verification.md",
-      "bytes": 19117,
-      "sha256": "1ee48a0142216a4244c71fb96942cc4a0c2cb253be552027cdd4f469621b6cf9"
+      "bytes": 19139,
+      "sha256": "4d3d3cc22a6631cc828de82732c201b4af9c352ace7ba217ae5bed6d49303270"
     },
     {
-      "path": "docs/official-crf-recording.md",
-      "bytes": 5482,
-      "sha256": "630e62b3955ea1463b775214c29d1ec52000d875df5e842519314db8233acd9c"
-    },
-    {
-      "path": "docs/official-recording-workflow.md",
-      "bytes": 7996,
-      "sha256": "1216d58c9e058c7999402da51540c602c064d16892f947e841ce9231c3ffa12c"
+      "path": "docs/operator-guide.html",
+      "bytes": 13199,
+      "sha256": "a86af5afbafbeb619ccd9ab43701046fe931fb66f62d9def985f0510fb621c2c"
     },
     {
       "path": "docs/optics-and-commissioning.md",
@@ -78,19 +216,24 @@
       "sha256": "0ad67e9b54d1067dd655e08c9cf084a97c4d98ba5306b89af393fe2216b2962c"
     },
     {
-      "path": "docs/完整使用说明.md",
-      "bytes": 19174,
-      "sha256": "c1379120c93369faeb80036d8a61c4085695b927a9dc6a7cdecd07bba6e9f979"
+      "path": "docs/workbench-validation.md",
+      "bytes": 3423,
+      "sha256": "4649c660ab6d46a38bc6169f1ef1526f13bea86a701e2bf764817059943bbe52"
     },
     {
-      "path": "docs/客户现场先看.md",
-      "bytes": 11188,
-      "sha256": "b5e1b7699f53cbc88795f2f92fc1c03350c97ae5598dd3f4a311b753b08924ea"
+      "path": "docs/客户下载与安装指南.md",
+      "bytes": 10556,
+      "sha256": "99fe3b0a91d08fd08b01e178bc0f20be103f5be8ab207b2584c71adde1ff6377"
     },
     {
-      "path": "docs/录制参数说明.md",
-      "bytes": 20001,
-      "sha256": "1dc168c81b0edd291da42f4b75a44c303567958cd3c94796914a3cf1a5c7d7e7"
+      "path": "docs/操作员上手指南.md",
+      "bytes": 10837,
+      "sha256": "663a29480c36f5cefe60c8e4f2d96b3a030ef6f4f1bf0b9f3945a4a245b3a0fe"
+    },
+    {
+      "path": "docs/维护人员配置说明.md",
+      "bytes": 7634,
+      "sha256": "583affc95c63679b2350a937466609f8e8483af4fd490281220971e1ec2e904c"
     },
     {
       "path": "installers/hash.txt",
@@ -119,8 +262,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 3848,
-      "sha256": "5794ccf3bfac388d6f885aaf97471ea0ef09066e757a844a12b4605041a32f45"
+      "bytes": 5978,
+      "sha256": "b52118b82afc9310eeb53217d07cbc01facff8bb6967d636f67d19b9792f7873"
     },
     {
       "path": "runtime/ffmpeg/bin/ffmpeg.exe",
@@ -724,8 +867,8 @@
     },
     {
       "path": "scripts/build-manifest.py",
-      "bytes": 1345,
-      "sha256": "ab5b63ff67cef407e65da51b7b8f39264baca71b271826cf5ca95cb9ea6e06d4"
+      "bytes": 1527,
+      "sha256": "dc8805c9209f16df8ebe3759bea5ae442d1ef08a123eb4fbae7cb6a20e338fc9"
     },
     {
       "path": "scripts/camera_profile.py",
@@ -734,8 +877,8 @@
     },
     {
       "path": "scripts/capture.py",
-      "bytes": 34373,
-      "sha256": "6dc7b52e79d938d9d81ed01e94a55c9f406b622711740f7f9f7d2b9c26753ea0"
+      "bytes": 36612,
+      "sha256": "16601622a087a5758260c2be44d63ed4332b2890331bfe69d4817f22cb072df0"
     },
     {
       "path": "scripts/compare_hevc_sample.py",
@@ -749,8 +892,8 @@
     },
     {
       "path": "scripts/diagnose_pc.py",
-      "bytes": 22187,
-      "sha256": "905875c250f6af854c73672840a1411c70db6a7f9f987e379868e233a76c0f1b"
+      "bytes": 22855,
+      "sha256": "5ec85d335373b0123f9dc65e9563e4c63f9a939e3945b1983929b224330e469d"
     },
     {
       "path": "scripts/encoder_diagnostics.py",
@@ -758,24 +901,59 @@
       "sha256": "9672b72b5ab52f7e78581d8f36ef7f5802a30554fbde7f00c40899e3f915f77f"
     },
     {
+      "path": "scripts/install-update.py",
+      "bytes": 12310,
+      "sha256": "9d2d0a0764879c966abbbc1bb3c3ecdbc46ddf12ba328d08b75c3013085be34b"
+    },
+    {
       "path": "scripts/live_preview.py",
       "bytes": 9685,
       "sha256": "4693178b9566c488ff8de382f1379c809bd1eaa61beb0024ad893a7c28edc0b8"
     },
     {
-      "path": "scripts/menu.py",
-      "bytes": 15866,
-      "sha256": "adc0a9f4c1ffaf8f740eb3f6602882ebfdf1297d47c3e463aaec2e42b6c31dd8"
+      "path": "scripts/operator_camera.py",
+      "bytes": 10923,
+      "sha256": "640e4de67a98b876304d29a4316f02ac55f5e1697edcb07b6756bc64cdd85da1"
+    },
+    {
+      "path": "scripts/operator_config.py",
+      "bytes": 11978,
+      "sha256": "799932511b79aad0e949e3353f4134d55d7fbf289102a9884b40777188373235"
+    },
+    {
+      "path": "scripts/operator_console.py",
+      "bytes": 20697,
+      "sha256": "834a6917ac1d425bf762cf64b175ee6b39fb4df56ced39b5db27e5bcce63f997"
+    },
+    {
+      "path": "scripts/operator_ui/app.js",
+      "bytes": 10032,
+      "sha256": "7fe4d3a57f5b5c976b1af3cb8d894673cfb592603f66127977326a010e89a865"
+    },
+    {
+      "path": "scripts/operator_ui/index.html",
+      "bytes": 10303,
+      "sha256": "d18f705e98c03483e0a646d148545410b13f491bd3ad2ff05ea12e48f12e2d22"
+    },
+    {
+      "path": "scripts/operator_ui/style.css",
+      "bytes": 8454,
+      "sha256": "80be40e6e42ad199e306a9e01ec5286b58cf99b250bb99f46b6fe7bc1bf2bb01"
+    },
+    {
+      "path": "scripts/package-delivery.py",
+      "bytes": 4456,
+      "sha256": "1971af98e45d3ecb7451e9ae59da61bd3ef8aa8af74cb80cf6c78068468d199c"
     },
     {
       "path": "scripts/package-release.py",
-      "bytes": 3145,
-      "sha256": "f0d14cb567f91efcc771600b41e39e29254aa36815bf2492b72921c78f36c5c5"
+      "bytes": 3072,
+      "sha256": "a49ed5af7b9c65cc06f5213a9a061235568ffa5d549920f05ec456572196b722"
     },
     {
       "path": "scripts/pc_environment.py",
-      "bytes": 9592,
-      "sha256": "e5b293ffc9092d1a1c7e094984e7e7989f0b1567fd937b14838ecab33b426783"
+      "bytes": 9757,
+      "sha256": "6fc54678124f755dfe236a7d48517a0a948efac51cd8e28b757f36acf4392fb5"
     },
     {
       "path": "scripts/recording_profile.py",
@@ -788,14 +966,19 @@
       "sha256": "0bdc6c40c41102eb279080aea5b901fb89874dcdeb76f323ac80a7f44c401a7c"
     },
     {
+      "path": "scripts/release_paths.py",
+      "bytes": 2672,
+      "sha256": "45dc2234cdc9b81c40289e59a28e23db4bbd3c316bd95d7fda86b5841169c99c"
+    },
+    {
       "path": "scripts/test_camera_profile.py",
       "bytes": 4867,
       "sha256": "905c7ae03dc0e37cb07685cb6fbe6bd73d39cb47d5509a20d82e5a891fc5bb11"
     },
     {
       "path": "scripts/test_capture_preview.py",
-      "bytes": 9052,
-      "sha256": "dce731b93f4a4d404c7fe79d8904637761041c075d0e702f23b029fd6c3f9e94"
+      "bytes": 9224,
+      "sha256": "f245a17762bed89524ac6e1664381950359a9cec1193dcff9ea7c122476b048e"
     },
     {
       "path": "scripts/test_capture_storage.py",
@@ -809,8 +992,8 @@
     },
     {
       "path": "scripts/test_diagnose_pc.py",
-      "bytes": 6415,
-      "sha256": "cc08951cdf0b695b4caba290f7751f5f7811e5668a679a80968c558137c9a4fd"
+      "bytes": 9216,
+      "sha256": "acc577471dfb2d886d43d5c80eb03660d0c5eb5597a4a6cac38f05eb2f429fa5"
     },
     {
       "path": "scripts/test_encoder_diagnostics.py",
@@ -818,9 +1001,14 @@
       "sha256": "80b4b2bbd95c1ee258ea2f050ca26f510942250afc92ff4f5defcdb85d402743"
     },
     {
+      "path": "scripts/test_install_update.py",
+      "bytes": 7405,
+      "sha256": "aa68cc8b41f35c90c01b7642c918e8b6ea8c630fa78c68c89000bbe8e5a24b45"
+    },
+    {
       "path": "scripts/test_launchers.py",
-      "bytes": 2618,
-      "sha256": "a556bfeed5a681c0aacf95a4809739ba49be696015976b8c02898b1d27e3fe61"
+      "bytes": 2733,
+      "sha256": "24592628612f128f6831feaf57b342018dfc5dc3662d43ea99979113a7583272"
     },
     {
       "path": "scripts/test_live_preview.py",
@@ -828,14 +1016,34 @@
       "sha256": "ec30aeb251ddc0aea0250b925244e35170298ac33abd240b9f886dc6c0e1934e"
     },
     {
+      "path": "scripts/test_operator_camera.py",
+      "bytes": 10226,
+      "sha256": "9d89fdeb3756ff2eaabe975ea4fc28a952393053a409aa71a3701a8964e332dd"
+    },
+    {
+      "path": "scripts/test_operator_config.py",
+      "bytes": 11385,
+      "sha256": "cc358112a61236b30640fba20a614ea68901477739a1ba864b55aec7a56969ba"
+    },
+    {
+      "path": "scripts/test_operator_console.py",
+      "bytes": 14665,
+      "sha256": "9e918b46d4c0690518ae0b4175ef8b50f97f8eaf97430d0601056cd9234be42d"
+    },
+    {
+      "path": "scripts/test_operator_launch.py",
+      "bytes": 4814,
+      "sha256": "19d5acfc0de3c0feb0014aaf80cd85c8f8c2c2d3c49ad1ba2200b4c9c066dc1f"
+    },
+    {
       "path": "scripts/test_pc_environment.py",
-      "bytes": 6434,
-      "sha256": "8dd02ede8c732efdc61c654530215f6fe9d5af5a1c0725c7da1650eace36bf55"
+      "bytes": 8015,
+      "sha256": "f6af5d5c30cd0b2fbaf7849de99335a49e5b9951f7d4b833ba2679f524665a32"
     },
     {
       "path": "scripts/test_recording_profile.py",
-      "bytes": 6152,
-      "sha256": "ab3a13319db41d73d7208ebb4907803bae23be94aed8294e3e9918e307fb1e89"
+      "bytes": 6338,
+      "sha256": "5ee4660bbf03afb50bfb6ae8366bedf0b018ec48381f0b1a7ea9bb63e37ef39b"
     },
     {
       "path": "scripts/test_recording_status.py",
@@ -843,9 +1051,14 @@
       "sha256": "7930a2b6d79c8756fd132c135ac7ea27f29754693351156de7d6e45791aa9974"
     },
     {
+      "path": "scripts/test_release_packaging.py",
+      "bytes": 4524,
+      "sha256": "f0453ede5129664365a556edec07c7b043eb45222ef0fb9144ca4697f30115dc"
+    },
+    {
       "path": "scripts/test_user_config.py",
-      "bytes": 9380,
-      "sha256": "4bf2b424be34de622be051ee0a3d1ea3c1dc010a24a8ece78ec85dbb63c5e686"
+      "bytes": 9816,
+      "sha256": "18cc1ef7285bee7ed63163245c23db2bfc7e04e0eb203867bbcd170321951715"
     },
     {
       "path": "scripts/test_video_writer.py",
@@ -854,8 +1067,8 @@
     },
     {
       "path": "scripts/verify-kit.py",
-      "bytes": 1407,
-      "sha256": "6496c0915ae91da740b51a3d513b5c7fc06ca0d1ffe3607abd31f8dc04bae420"
+      "bytes": 1469,
+      "sha256": "c0a0c79dd0ad746cf6fe59bd06782a31a777866ba7483d9e326a658cd2fa3dea"
     },
     {
       "path": "scripts/video_writer.py",
@@ -3968,59 +4181,14 @@
       "sha256": "3c0d4692cde0467f4dae172ea446559cf144f2796f8668bc7c7d161c67d7b80d"
     },
     {
-      "path": "test/legacy/打开相机预览.cmd",
-      "bytes": 118,
-      "sha256": "f6cbd47ba749aad8ac972185bfc031ab707b3e5aabc1a43e659f24810f3acefc"
-    },
-    {
-      "path": "test/legacy/按官方参数CRF录制.cmd",
-      "bytes": 130,
-      "sha256": "68bff2c6977c84b1d3cc34cb9ddc7a998cf5aab9623f3249fb7c7eeb31cbc5af"
-    },
-    {
-      "path": "test/legacy/按推荐配置录制.cmd",
-      "bytes": 129,
-      "sha256": "ec375a3b3d698fbfac730945dd52f9ca5b701fcc4fa1fe7064a9d5f52d18a15b"
-    },
-    {
-      "path": "test/legacy/推荐配置试录60秒.cmd",
-      "bytes": 134,
-      "sha256": "0517f7811e76c8d82dfb36060a68a0742502ea7ff90412dc15d0361d9ce473f4"
-    },
-    {
-      "path": "test/legacy/试录H265一分钟.cmd",
-      "bytes": 584,
-      "sha256": "8344c8bf053c9af73b42dac3616f022b64fc68e62b5564460c94b97bf9d44325"
-    },
-    {
-      "path": "test/legacy/试录官方参数CRF一分钟.cmd",
-      "bytes": 135,
-      "sha256": "4f17b3dd775c0b3c166d196e0f36f0b01ec090de0f96024b6339e9694ac00eab"
-    },
-    {
-      "path": "test/启动相机工具.cmd",
-      "bytes": 109,
-      "sha256": "437b1c84c4945c965874728bf548183da63196946330c4290b9c95e2cd21a3ff"
-    },
-    {
       "path": "test/校验软件包.cmd",
       "bytes": 180,
       "sha256": "0b61f5674e201b14b8f2a3469c9cabbece43c1f788d190427a1a0c7045bb5d6e"
     },
     {
-      "path": "test/检查录制配置.cmd",
-      "bytes": 199,
-      "sha256": "93a2cf825f86c0eb091979c4710b850c238ad38637fa3c0a22f5b23df15e135e"
-    },
-    {
-      "path": "test/试录当前配置一分钟.cmd",
-      "bytes": 198,
-      "sha256": "c7532354497e16468659c03bf3fe6d2b1b68847206fb073f94cc6ba4beaa4b54"
-    },
-    {
       "path": "启动录制.cmd",
-      "bytes": 187,
-      "sha256": "2ec673a2c238da04c546525b86b0b38bd3271e53073b3a4feecdff62b1636717"
+      "bytes": 225,
+      "sha256": "d65cc0d2164ca6bb7e0950714e9109b30516f7952977329fa98a63ae516aedbf"
     },
     {
       "path": "回看录像.cmd",
@@ -4031,11 +4199,6 @@
       "path": "客户电脑快速诊断.cmd",
       "bytes": 476,
       "sha256": "ae3a1b43cd81fa6aaa732b14689a34c9467afc429c64105c20d98ec26523bc69"
-    },
-    {
-      "path": "打开官方录制软件.cmd",
-      "bytes": 103,
-      "sha256": "d2b0938116f82c624aeeb3d44ac1d72997c2786751f5ded0045e58c2fa04c18b"
     }
   ]
 }
